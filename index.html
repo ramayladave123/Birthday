@@ -20,6 +20,7 @@
             font-family: 'Outfit', sans-serif;
             overflow: hidden;
             min-height: 100vh;
+            cursor: crosshair;
         }
 
         /* Subtle Animated Background Gradient */
@@ -29,7 +30,7 @@
             background: linear-gradient(135deg, #8b2f3e 0%, #a64455 50%, #6e212d 100%);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
-            z-index: -1;
+            z-index: -3;
         }
 
         @keyframes gradientShift {
@@ -38,7 +39,77 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Diagonal Stage Transition */
+        /* Shimmer Overlay Effect */
+        .shimmer-overlay {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.05) 50%, transparent 55%);
+            background-size: 200% 200%;
+            animation: shimmerMove 8s infinite linear;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        @keyframes shimmerMove {
+            0% { background-position: -200% -200%; }
+            100% { background-position: 200% 200%; }
+        }
+
+        /* Ambient Bokeh / Bubbles */
+        .bokeh {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            filter: blur(8px);
+            pointer-events: none;
+            z-index: -1;
+            animation: bokeh-float var(--d) infinite ease-in-out;
+        }
+
+        @keyframes bokeh-float {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+            50% { transform: translate(var(--x), var(--y)) scale(1.3); opacity: 0.4; }
+        }
+
+        /* Floating Animation for background elements */
+        .floating-heart {
+            position: absolute;
+            color: white; 
+            pointer-events: none;
+            z-index: -1;
+            animation: float-up var(--duration) linear infinite;
+            font-size: var(--size);
+            left: var(--left);
+            bottom: -100px;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+            15% { opacity: var(--opacity); }
+            85% { opacity: var(--opacity); }
+            100% { transform: translateY(-120vh) rotate(360deg) scale(1.5); opacity: 0; }
+        }
+
+        /* Sparkle Particle for Mouse Trail */
+        .sparkle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: white;
+            pointer-events: none;
+            z-index: 9999;
+            box-shadow: 0 0 10px white;
+            animation: sparkle-fade 1s linear forwards;
+        }
+
+        @keyframes sparkle-fade {
+            0% { transform: scale(1) translate(0, 0); opacity: 1; }
+            100% { transform: scale(0) translate(var(--mx), var(--my)); opacity: 0; }
+        }
+
+        /* Stage Transition */
         .stage {
             position: absolute;
             inset: 0;
@@ -48,52 +119,64 @@
             align-items: center;
             padding: 20px;
             transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translate(100px, 100px);
+            transform: scale(0.9);
             opacity: 0;
         }
 
         .active-stage {
             display: flex;
-            transform: translate(0, 0);
+            transform: scale(1);
             opacity: 1;
             z-index: 10;
         }
 
         .exit-stage {
-            transform: translate(-100px, -100px);
+            transform: scale(1.1) translateY(-30px);
             opacity: 0;
+            filter: blur(10px);
         }
 
         /* Typography */
         .font-elegant { font-family: 'Great Vibes', cursive; }
-        .font-script { font-family: 'Dancing Script', cursive; }
         .font-handwritten { font-family: 'Caveat', cursive; }
 
         .glow-text {
             color: white;
             text-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,182,193,0.6);
-            animation: glowPulse 3s ease-in-out infinite;
+            animation: glowPulse 3.5s ease-in-out infinite;
         }
 
         @keyframes glowPulse {
-            0%, 100% { text-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,182,193,0.6); }
-            50% { text-shadow: 0 0 25px rgba(255,255,255,1), 0 0 50px rgba(255,182,193,0.9); }
+            0%, 100% { text-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,182,193,0.6); filter: brightness(1); }
+            50% { text-shadow: 0 0 25px rgba(255,255,255,1), 0 0 50px rgba(255,182,193,0.9); filter: brightness(1.2); }
         }
 
-        /* Heart Animation - Only for Stage 1 */
-        .heart-glow {
+        /* Beating Heart Animation - Stage 1 */
+        .heart-beating-glow {
             position: absolute;
-            width: 200px;
-            height: 200px;
-            background: white;
+            width: 180px;
+            height: 180px;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 50%;
             filter: blur(50px);
-            animation: pulse-glow 2s infinite alternate;
+            animation: beat-glow-anim 1.2s infinite ease-in-out;
+            z-index: 1;
         }
 
-        @keyframes pulse-glow {
-            from { transform: scale(0.8); opacity: 0.4; }
-            to { transform: scale(1.5); opacity: 0.9; }
+        @keyframes beat-glow-anim {
+            0%, 100% { transform: scale(1); opacity: 0.5; filter: blur(40px); }
+            50% { transform: scale(1.7); opacity: 1; filter: blur(60px); }
+        }
+
+        .heart-main-icon {
+            animation: heart-scale-anim 1.2s infinite ease-in-out;
+            z-index: 10;
+            position: relative;
+        }
+
+        @keyframes heart-scale-anim {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
         }
 
         /* Icon Morph Effect when clicking */
@@ -104,28 +187,42 @@
         }
 
         .gift-btn:hover {
-            transform: translateY(-15px) scale(1.1);
+            transform: translateY(-20px) scale(1.1);
+        }
+        
+        .gift-btn img {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .gift-btn:hover img {
+            transform: rotate(10deg) scale(1.1);
         }
 
         .gift-btn.morphing {
             transform: scale(3) translateY(-50px);
             opacity: 0;
-            filter: blur(10px);
+            filter: blur(15px);
         }
 
         /* Polaroid Morph Effect */
         .polaroid {
             background: white;
-            padding: 10px 10px 30px 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transform: translate(150px, 150px) rotate(var(--rot)) scale(0.5);
+            padding: 10px 10px 35px 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transform: translate(200px, 200px) rotate(var(--rot)) scale(0);
             opacity: 0;
-            transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .polaroid.morphed {
             transform: translate(0, 0) rotate(var(--rot)) scale(1);
             opacity: 1;
+        }
+
+        .polaroid:hover {
+            z-index: 50;
+            transform: scale(1.1) rotate(0deg) !important;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
         }
 
         .polaroid img {
@@ -139,18 +236,18 @@
             background: #fff;
             position: relative;
             padding: 60px;
-            border-radius: 4px;
+            border-radius: 8px;
             max-width: 800px;
             width: 95%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.4);
             background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
-            transform: scale(0.9);
+            transform: translateY(50px) scale(0.9);
             opacity: 0;
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .modal-active .parchment-container {
-            transform: scale(1);
+            transform: translateY(0) scale(1);
             opacity: 1;
         }
 
@@ -159,7 +256,7 @@
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
             z-index: 100;
             display: none;
             justify-content: center;
@@ -171,7 +268,7 @@
         /* Letter Reveal Animation */
         .reveal-text p {
             opacity: 0;
-            transform: translateY(10px);
+            transform: translateY(15px);
             transition: all 0.8s ease;
         }
         .modal-active .reveal-text p {
@@ -180,72 +277,124 @@
         }
         
         .btn-back {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
             font-family: 'Great Vibes', cursive;
-            font-size: 1.5rem;
-            padding: 0.5rem 2rem;
+            font-size: 1.8rem;
+            padding: 0.6rem 2.5rem;
             border-radius: 9999px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
             margin-top: 2rem;
+            backdrop-filter: blur(5px);
         }
         
         .btn-back:hover {
             background: white;
             color: #8b2f3e;
-            transform: scale(1.05);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        /* Special darker back button for light parchment */
         .btn-back-dark {
-            background: rgba(139, 47, 62, 0.1);
+            background: rgba(139, 47, 62, 0.05);
             color: #8b2f3e;
-            border-color: rgba(139, 47, 62, 0.3);
+            border-color: rgba(139, 47, 62, 0.2);
+        }
+        
+        /* Floating Note Decoration */
+        .decoration-icon {
+            position: absolute;
+            opacity: 0.4;
+            animation: float-slight 5s ease-in-out infinite;
+        }
+        
+        @keyframes float-slight {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(8deg); }
+        }
+
+        /* Smooth Float for YouTube Frame */
+        .smooth-float {
+            animation: smooth-float-anim 6s ease-in-out infinite;
+        }
+
+        @keyframes smooth-float-anim {
+            0%, 100% { transform: translate(0, 0) rotate(1deg); }
+            50% { transform: translate(5px, -15px) rotate(-1deg); }
+        }
+
+        /* Floating background lines - very subtle */
+        .ambient-line {
+            position: fixed;
+            background: white;
+            opacity: 0.05;
+            width: 1px;
+            height: 120px;
+            pointer-events: none;
+            z-index: -2;
+            animation: line-fall linear infinite;
+        }
+
+        @keyframes line-fall {
+            from { transform: translateY(-100px); }
+            to { transform: translateY(110vh); }
         }
     </style>
 </head>
-<body>
+<body onmousemove="spawnSparkle(event)">
 
     <div class="bg-animate"></div>
+    <div class="shimmer-overlay"></div>
+    <div id="particles-container"></div>
+    <div id="bokeh-container"></div>
 
     <!-- STAGE 1: INTRO -->
     <div id="stage1" class="stage active-stage">
-        <h1 class="font-elegant text-8xl md:text-9xl glow-text mb-12">Happy Birthday!</h1>
-        <div class="relative flex items-center justify-center cursor-pointer group" onclick="goToStage(2)">
-            <div class="heart-glow"></div>
-            <span class="text-9xl relative z-10 filter drop-shadow-lg transition-transform group-hover:scale-110">🤍</span>
+        <h1 class="font-elegant text-8xl md:text-9xl glow-text mb-12 text-center select-none">Happy Birthday!</h1>
+        <div class="relative flex items-center justify-center cursor-pointer group" onclick="triggerIntroTransition()">
+            <div class="heart-beating-glow"></div>
+            <span class="text-9xl relative z-10 heart-main-icon filter drop-shadow-lg transition-transform group-hover:scale-125 duration-700">🤍</span>
         </div>
-        <p class="font-elegant text-4xl text-white mt-12 opacity-80 animate-bounce">Click on heart to begin</p>
+        <p class="font-elegant text-4xl text-white mt-12 opacity-60 animate-pulse tracking-widest">Tap to Open</p>
     </div>
 
     <!-- STAGE 2: HI LOVE -->
     <div id="stage2" class="stage">
-        <div class="text-center">
-            <h2 class="font-elegant text-7xl md:text-8xl text-white mb-6">Hi, Love... today's your special day.</h2>
-            <p class="font-elegant text-6xl text-white mb-16">I made something for you.</p>
-            <div class="flex gap-8 justify-center">
-                <button onclick="goToStage(3)" class="bg-white/10 border border-white/30 text-white font-elegant text-4xl px-12 py-3 rounded-full hover:bg-white hover:text-pink-900 transition hover:scale-105">Really?</button>
-                <button onclick="goToStage(3)" class="bg-white/10 border border-white/30 text-white font-elegant text-4xl px-12 py-3 rounded-full hover:bg-white hover:text-pink-900 transition hover:scale-105">Okay!</button>
+        <div class="text-center max-w-4xl px-4">
+            <h2 class="font-elegant text-7xl md:text-8xl text-white mb-6 leading-tight">Hi, Love... today's your special day.</h2>
+            <p class="font-elegant text-6xl text-pink-100/80 mb-16 italic">I made something for you.</p>
+            <div class="flex flex-col sm:flex-row gap-8 justify-center items-center">
+                <button onclick="goToStage(3)" class="w-full sm:w-auto bg-white/5 border border-white/20 text-white font-elegant text-4xl px-16 py-4 rounded-full hover:bg-white hover:text-pink-900 transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]">Really?</button>
+                <button onclick="goToStage(3)" class="w-full sm:w-auto bg-white/5 border border-white/20 text-white font-elegant text-4xl px-16 py-4 rounded-full hover:bg-white hover:text-pink-900 transition-all duration-500 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]">Okay!</button>
             </div>
         </div>
     </div>
 
     <!-- STAGE 3: GIFT CHOICE -->
     <div id="stage3" class="stage">
-        <h2 class="font-elegant text-8xl text-white mb-20 glow-text">Choose your Gift</h2>
-        <div class="flex flex-wrap justify-center gap-16 md:gap-24">
+        <h2 class="font-elegant text-7xl md:text-9xl text-white mb-20 glow-text text-center">Choose your Gift</h2>
+        <div class="flex flex-wrap justify-center gap-12 md:gap-24 px-6">
             <div class="gift-btn text-center" onclick="morphToModal(this, 'message')">
-                <img src="image/image-removebg-preview (6).png" class="w-32 h-32 mb-4 filter brightness-110">
-                <p class="font-elegant text-5xl text-white">Message</p>
+                <div class="relative">
+                    <img src="image/image-removebg-preview (6).png" class="w-28 h-28 md:w-40 md:h-40 mb-4 filter drop-shadow-2xl">
+                    <div class="absolute -top-4 -right-4 bg-white/20 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center animate-pulse">✨</div>
+                </div>
+                <p class="font-elegant text-4xl md:text-5xl text-white">Message</p>
             </div>
             <div class="gift-btn text-center" onclick="morphToModal(this, 'teddy')">
-                <img src="image/image-removebg-preview (7).png" class="w-32 h-32 mb-4 filter brightness-110">
-                <p class="font-elegant text-5xl text-white">Teddy Bear</p>
+                <div class="relative">
+                    <img src="image/image-removebg-preview (7).png" class="w-28 h-28 md:w-40 md:h-40 mb-4 filter drop-shadow-2xl">
+                    <div class="absolute -top-4 -right-4 bg-white/20 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center animate-pulse" style="animation-delay: 0.5s">🧸</div>
+                </div>
+                <p class="font-elegant text-4xl md:text-5xl text-white">Teddy Bear</p>
             </div>
             <div class="gift-btn text-center" onclick="morphToModal(this, 'cake')">
-                <img src="image/image-removebg-preview (8).png"class="w-32 h-32 mb-4 filter brightness-110">
-                <p class="font-elegant text-5xl text-white">Cake</p>
+                <div class="relative">
+                    <img src="image/image-removebg-preview (8).png" class="w-28 h-28 md:w-40 md:h-40 mb-4 filter drop-shadow-2xl">
+                    <div class="absolute -top-4 -right-4 bg-white/20 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center animate-pulse" style="animation-delay: 1s">🍰</div>
+                </div>
+                <p class="font-elegant text-4xl md:text-5xl text-white">Cake</p>
             </div>
         </div>
     </div>
@@ -255,53 +404,51 @@
         
         <!-- CONTENT: MESSAGE (Parchment Style) -->
         <div id="content-message" class="parchment-container hidden" onclick="event.stopPropagation()">
-            <img src="image/image-removebg-preview (910).png" class="absolute top-0 left-0 w-32 opacity-80" onerror="this.style.display='none'">
-            <img src="image/image-removebg-preview (910).png" class="absolute bottom-0 right-0 w-32 rotate-180 opacity-80" onerror="this.style.display='none'">
-            
             <div class="text-center mb-10">
-                <h2 class="font-elegant text-6xl text-pink-800">Happy Birthday My Love,</h2>
+                <h2 class="font-elegant text-6xl md:text-7xl text-pink-800">Happy Birthday My Love,</h2>
             </div>
-            <div class="font-handwritten text-3xl text-gray-700 leading-relaxed space-y-6 reveal-text">
+            <div class="font-handwritten text-3xl md:text-4xl text-gray-700 leading-relaxed space-y-6 reveal-text px-4">
                 <p style="transition-delay: 0.2s">I just want to say that I love you very much. Thank youuu for being part of my days, both the good and the bad. I’m so glad to have met you.</p>
                 <p style="transition-delay: 0.4s">As you start another year, I hope it’s filled with all the happiness and love you deserve. Even when things get tough, I’ll always believe in you, I know you can get through anything.</p>
-                <p style="transition-delay: 0.6s">I love everything about who you are, and I truly wish the very best for your future. I can't wait to see all the wonderful things you'll achieve. Stay safe always and take care.
-
-Once again, happy birthday, mi loves.</p>
+                <p style="transition-delay: 0.6s">I love everything about who you are, and I truly wish the very best for your future. I can't wait to see all the wonderful things you'll achieve. Stay safe always and take care.</p>
+                <p style="transition-delay: 0.8s" class="text-pink-700 font-bold">Once again, happy birthday, mi loves.</p>
             </div>
-            <div class="mt-10 font-elegant text-5xl text-pink-800 text-right pr-10 reveal-text" style="transition-delay: 1s">
+            <div class="mt-10 font-elegant text-5xl md:text-6xl text-pink-800 text-right pr-10 reveal-text" style="transition-delay: 1.2s">
                 <p>Love, Dabiii^ ^</p>
             </div>
-            <div class="flex justify-center">
+            <div class="flex justify-center mt-12">
                 <button onclick="closeModal()" class="btn-back btn-back-dark">← Back</button>
             </div>
         </div>
 
         <!-- CONTENT: TEDDY (Song & Bear) -->
         <div id="content-teddy" class="parchment-container hidden bg-pink-50" onclick="event.stopPropagation()">
-            <h2 class="font-elegant text-6xl text-pink-700 text-center mb-8 italic">This song is for you...</h2>
-            <div class="flex flex-col lg:flex-row gap-8 items-center">
-                <div class="w-full lg:w-2/3 aspect-video rounded-xl overflow-hidden shadow-2xl border-4 border-white transform transition-transform hover:rotate-1">
-                    <iframe width="560" height="315" 
+            <h2 class="font-elegant text-6xl text-pink-700 text-center mb-12 italic">A special song for you...</h2>
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="w-full lg:w-2/3 aspect-video rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(219,39,119,0.3)] border-8 border-white smooth-float">
+                    <iframe width="100%" height="100%" 
                         src="https://www.youtube-nocookie.com/embed/QEJmOJmAkAc" 
-                         title="YouTube video player" 
+                        title="YouTube video player" 
                         frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        referrerpolicy="strict-origin-when-cross-origin" 
-                         allowfullscreen>
-                            </iframe>
+                        allowfullscreen>
+                    </iframe>
                 </div>
                 <div class="w-full lg:w-1/3 text-center">
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmdrZTF4dzV4NHYxZzRxbTlxZzJndDNoZzJndDNoZzJndDNoZzJndCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Vz58J8shFW6BvqnYTm/giphy.gif" 
-                         class="w-48 h-48 mx-auto rounded-3xl object-cover shadow-lg border-2 border-white mb-4 animate-bounce" style="animation-duration: 3s">
-                    <p class="font-handwritten text-3xl text-pink-600 animate-pulse">You're my everything! ❤️</p>
+                    <div class="relative inline-block">
+                         <img src="image/guitar.gif" 
+                         class="w-56 h-56 mx-auto rounded-3xl object-cover shadow-2xl border-4 border-pink-200 mb-6">
+                         <span class="absolute -top-2 -right-2 text-4xl animate-pulse">💝</span>
+                    </div>
+                    <p class="font-handwritten text-2xl text-pink-600 font-bold mb-2">You're my everything!</p>
                 </div>
             </div>
-            <div class="flex justify-center mt-6">
+            <div class="flex justify-center mt-10">
                 <button onclick="closeModal()" class="btn-back btn-back-dark">← Back</button>
             </div>
         </div>
 
-        <!-- CONTENT: CAKE (Us / Polaroids) -->
+         <!-- CONTENT: CAKE (Us / Polaroids) -->
         <div id="content-cake" class="w-full max-w-5xl hidden" onclick="event.stopPropagation()">
             <div class="text-center mb-12">
                 <h2 class="font-elegant text-8xl text-white glow-text mb-2">Us ❤️</h2>
@@ -342,6 +489,113 @@ Once again, happy birthday, mi loves.</p>
     </div>
 
     <script>
+        function initAmbientEffects() {
+            const container = document.getElementById('particles-container');
+            const bokehContainer = document.getElementById('bokeh-container');
+            // Simplified emoji list for background
+            const icons = ['🤍', '✨', '💖', '⭐', '🌸'];
+            
+            // Reduced particle count from 70 to 35 for a cleaner look
+            for (let i = 0; i < 35; i++) { 
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                
+                const duration = 15 + Math.random() * 25; 
+                const size = 15 + Math.random() * 35; 
+                const left = Math.random() * 100;
+                const delay = Math.random() * -30;
+                // Set opacity to at least 0.3 as requested
+                const opacity = 0.3 + Math.random() * 0.2; 
+                
+                heart.style.setProperty('--duration', `${duration}s`);
+                heart.style.setProperty('--size', `${size}px`);
+                heart.style.setProperty('--left', `${left}%`);
+                heart.style.setProperty('--opacity', opacity);
+                heart.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(heart);
+            }
+
+            // Reduced bokeh elements
+            for (let i = 0; i < 12; i++) {
+                const b = document.createElement('div');
+                b.className = 'bokeh';
+                const size = 60 + Math.random() * 150;
+                b.style.width = size + 'px';
+                b.style.height = size + 'px';
+                b.style.left = Math.random() * 100 + '%';
+                b.style.top = Math.random() * 100 + '%';
+                b.style.setProperty('--x', (Math.random() * 100 - 50) + 'px');
+                b.style.setProperty('--y', (Math.random() * 100 - 50) + 'px');
+                b.style.setProperty('--d', (5 + Math.random() * 10) + 's');
+                b.style.animationDelay = (Math.random() * -10) + 's';
+                bokehContainer.appendChild(b);
+            }
+
+            // Subdued ambient lines
+            for(let i=0; i<8; i++) {
+                const line = document.createElement('div');
+                line.className = 'ambient-line';
+                line.style.left = Math.random() * 100 + 'vw';
+                line.style.animationDuration = (4 + Math.random() * 6) + 's';
+                line.style.animationDelay = Math.random() * -10 + 's';
+                document.body.appendChild(line);
+            }
+        }
+
+        function spawnSparkle(e) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = e.clientX + 'px';
+            sparkle.style.top = e.clientY + 'px';
+            
+            const mx = (Math.random() - 0.5) * 60;
+            const my = (Math.random() - 0.5) * 60;
+            sparkle.style.setProperty('--mx', mx + 'px');
+            sparkle.style.setProperty('--my', my + 'px');
+            
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 1000);
+        }
+
+        function triggerIntroTransition() {
+            const heart = document.querySelector('.heart-main-icon');
+            const rect = heart.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for(let i=0; i<80; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.left = centerX + 'px';
+                    confetti.style.top = centerY + 'px';
+                    confetti.style.zIndex = '100';
+                    confetti.innerHTML = ['❤️','🤍','✨','🌸','💝', '💐', '🌹'][Math.floor(Math.random()*7)];
+                    confetti.style.fontSize = (Math.random() * 25 + 20) + 'px';
+                    confetti.style.pointerEvents = 'none';
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 700 + 400;
+                    const destX = Math.cos(angle) * distance;
+                    const destY = Math.sin(angle) * distance;
+                    
+                    document.body.appendChild(confetti);
+                    
+                    confetti.animate([
+                        { transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
+                        { transform: `translate(${destX}px, ${destY}px) scale(0) rotate(${360 + Math.random()*360}deg)`, opacity: 0 }
+                    ], {
+                        duration: 2500 + Math.random() * 1000,
+                        easing: 'cubic-bezier(0.1, 1, 0.1, 1)'
+                    }).onfinish = () => confetti.remove();
+                }, Math.random() * 100);
+            }
+            
+            setTimeout(() => goToStage(2), 600);
+        }
+
         function goToStage(num) {
             const current = document.querySelector('.active-stage');
             const target = document.getElementById('stage' + num);
@@ -359,10 +613,30 @@ Once again, happy birthday, mi loves.</p>
 
         function morphToModal(element, type) {
             element.classList.add('morphing');
+            const rect = element.getBoundingClientRect();
+            const ring = document.createElement('div');
+            ring.style.cssText = `
+                position: fixed;
+                left: ${rect.left + rect.width/2}px;
+                top: ${rect.top + rect.height/2}px;
+                width: 10px;
+                height: 10px;
+                border: 2px solid white;
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 100;
+                transform: translate(-50%, -50%);
+            `;
+            document.body.appendChild(ring);
+            ring.animate([
+                { width: '10px', height: '10px', opacity: 1 },
+                { width: '500px', height: '500px', opacity: 0 }
+            ], { duration: 600, easing: 'ease-out' }).onfinish = () => ring.remove();
+
             setTimeout(() => {
                 openModal(type);
                 element.classList.remove('morphing');
-            }, 400);
+            }, 450);
         }
 
         function openModal(type) {
@@ -373,7 +647,7 @@ Once again, happy birthday, mi loves.</p>
             const content = document.getElementById('content-' + type);
             content.classList.remove('hidden');
 
-            overlay.offsetHeight;
+            overlay.offsetHeight; 
             overlay.classList.add('modal-active');
 
             if (type === 'cake') {
@@ -381,7 +655,7 @@ Once again, happy birthday, mi loves.</p>
                 polaroids.forEach((p, index) => {
                     setTimeout(() => {
                         p.classList.add('morphed');
-                    }, index * 150);
+                    }, 400 + (index * 180));
                 });
             }
         }
@@ -393,10 +667,11 @@ Once again, happy birthday, mi loves.</p>
             setTimeout(() => {
                 overlay.style.display = 'none';
                 document.querySelectorAll('.polaroid').forEach(p => p.classList.remove('morphed'));
-            }, 500);
+            }, 700);
         }
 
         window.onload = () => {
+            initAmbientEffects();
             const s1 = document.getElementById('stage1');
             s1.style.display = 'flex';
             setTimeout(() => s1.classList.add('active-stage'), 100);
