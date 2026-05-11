@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Surprise</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&family=Caveat:wght@400;700&family=Outfit:wght@300;400&display=swap');
+
+        :root {
+            --bg-pink: #fce4ec;
+            --dark-pink: #8b2f3e;
+            --accent-pink: #ffb7c5;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--dark-pink);
+            font-family: 'Outfit', sans-serif;
+            overflow: hidden;
+            min-height: 100vh;
+        }
+
+        /* Subtle Animated Background Gradient */
+        .bg-animate {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #8b2f3e 0%, #a64455 50%, #6e212d 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Diagonal Stage Transition */
+        .stage {
+            position: absolute;
+            inset: 0;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translate(100px, 100px);
+            opacity: 0;
+        }
+
+        .active-stage {
+            display: flex;
+            transform: translate(0, 0);
+            opacity: 1;
+            z-index: 10;
+        }
+
+        .exit-stage {
+            transform: translate(-100px, -100px);
+            opacity: 0;
+        }
+
+        /* Typography */
+        .font-elegant { font-family: 'Great Vibes', cursive; }
+        .font-script { font-family: 'Dancing Script', cursive; }
+        .font-handwritten { font-family: 'Caveat', cursive; }
+
+        .glow-text {
+            color: white;
+            text-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,182,193,0.6);
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 15px rgba(255,255,255,0.8), 0 0 30px rgba(255,182,193,0.6); }
+            50% { text-shadow: 0 0 25px rgba(255,255,255,1), 0 0 50px rgba(255,182,193,0.9); }
+        }
+
+        /* Heart Animation - Only for Stage 1 */
+        .heart-glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: white;
+            border-radius: 50%;
+            filter: blur(50px);
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            from { transform: scale(0.8); opacity: 0.4; }
+            to { transform: scale(1.5); opacity: 0.9; }
+        }
+
+        /* Icon Morph Effect when clicking */
+        .gift-btn {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .gift-btn:hover {
+            transform: translateY(-15px) scale(1.1);
+        }
+
+        .gift-btn.morphing {
+            transform: scale(3) translateY(-50px);
+            opacity: 0;
+            filter: blur(10px);
+        }
+
+        /* Polaroid Morph Effect */
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: translate(150px, 150px) rotate(var(--rot)) scale(0.5);
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .polaroid.morphed {
+            transform: translate(0, 0) rotate(var(--rot)) scale(1);
+            opacity: 1;
+        }
+
+        .polaroid img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+
+        /* Modal Parchment Styles */
+        .parchment-container {
+            background: #fff;
+            position: relative;
+            padding: 60px;
+            border-radius: 4px;
+            max-width: 800px;
+            width: 95%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png');
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-active .parchment-container {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        /* Modal Overlay */
+        #modalOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        /* Letter Reveal Animation */
+        .reveal-text p {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.8s ease;
+        }
+        .modal-active .reveal-text p {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .btn-back {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.5rem;
+            padding: 0.5rem 2rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-top: 2rem;
+        }
+        
+        .btn-back:hover {
+            background: white;
+            color: #8b2f3e;
+            transform: scale(1.05);
+        }
+
+        /* Special darker back button for light parchment */
+        .btn-back-dark {
+            background: rgba(139, 47, 62, 0.1);
+            color: #8b2f3e;
+            border-color: rgba(139, 47, 62, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animate"></div>
+
+    <!-- STAGE 1: INTRO -->
+    <div id="stage1" class="stage active-stage">
+        <h1 class="font-elegant text-8xl md:text-9xl glow-text mb-12">Happy Birthday!</h1>
+        <div class="relative flex items-center justify-center cursor-pointer group" onclick="goToStage(2)">
+            <div class="heart-glow"></div>
+            <span class="text-9xl relative z-10 filter drop-shadow-lg transition-transform group-hover:scale-110">🤍</span>
+        </div>
+        <p class="font-elegant text-4xl text-white mt-12 opacity-80 animate-bounce">Click on heart to begin</p>
+    </div>
+
+    <!-- STAGE 2: HI LOVE -->
+    <div id="stage2" class="stage">
+        <div class="text-center">
+            <h2 class="font-elegant text-7xl md:text-8xl text-white mb-6">Hi, Love... today's your special day.</h2>
+            <p class="font-elegant text-6xl text-white mb-16">I made something for you.</p>
+            <div class="flex gap-8 justify-center">
+                <button onclick="goToStage(3)" class="bg-white/10 border border-white/30 text-white font-elegant text-4xl px-12 py-3 rounded-full hover:bg-white hover:text-pink-900 transition hover:scale-105">Really?</button>
+                <button onclick="goToStage(3)" class="bg-white/10 border border-white/30 text-white font-elegant text-4xl px-12 py-3 rounded-full hover:bg-white hover:text-pink-900 transition hover:scale-105">Okay!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STAGE 3: GIFT CHOICE -->
+    <div id="stage3" class="stage">
+        <h2 class="font-elegant text-8xl text-white mb-20 glow-text">Choose your Gift</h2>
+        <div class="flex flex-wrap justify-center gap-16 md:gap-24">
+            <div class="gift-btn text-center" onclick="morphToModal(this, 'message')">
+                <img src="C:\Users\USER\Downloads\image-removebg-preview (6).png" class="w-32 h-32 mb-4 filter brightness-110">
+                <p class="font-elegant text-5xl text-white">Message</p>
+            </div>
+            <div class="gift-btn text-center" onclick="morphToModal(this, 'teddy')">
+                <img src="C:\Users\USER\Downloads\image-removebg-preview (7).png" class="w-32 h-32 mb-4 filter brightness-110">
+                <p class="font-elegant text-5xl text-white">Teddy Bear</p>
+            </div>
+            <div class="gift-btn text-center" onclick="morphToModal(this, 'cake')">
+                <img src="C:\Users\USER\Downloads\image-removebg-preview (8).png"class="w-32 h-32 mb-4 filter brightness-110">
+                <p class="font-elegant text-5xl text-white">Cake</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL OVERLAY -->
+    <div id="modalOverlay" onclick="closeModal()">
+        
+        <!-- CONTENT: MESSAGE (Parchment Style) -->
+        <div id="content-message" class="parchment-container hidden" onclick="event.stopPropagation()">
+            <img src="C:\Users\USER\Downloads\image-removebg-preview (910).png" class="absolute top-0 left-0 w-32 opacity-80" onerror="this.style.display='none'">
+            <img src="C:\Users\USER\Downloads\image-removebg-preview (910).png" class="absolute bottom-0 right-0 w-32 rotate-180 opacity-80" onerror="this.style.display='none'">
+            
+            <div class="text-center mb-10">
+                <h2 class="font-elegant text-6xl text-pink-800">Happy Birthday My Love,</h2>
+            </div>
+            <div class="font-handwritten text-3xl text-gray-700 leading-relaxed space-y-6 reveal-text">
+                <p style="transition-delay: 0.2s">I just wanna say that I love you very much. Thank you for being part of my days, good and bad. I'm glad to have met you in my life.</p>
+                <p style="transition-delay: 0.4s">I love the silly little things about you. It's another year for you. May this year be filled with happiness and love for you.</p>
+                <p style="transition-delay: 0.6s">Even if not, I always believe you can get through anything. Stay safe always and take care. Once again, Happy bday mi loves.</p>
+            </div>
+            <div class="mt-10 font-elegant text-5xl text-pink-800 text-right pr-10 reveal-text" style="transition-delay: 1s">
+                <p>Love, Fluffora</p>
+            </div>
+            <div class="flex justify-center">
+                <button onclick="closeModal()" class="btn-back btn-back-dark">← Back</button>
+            </div>
+        </div>
+
+        <!-- CONTENT: TEDDY (Song & Bear) -->
+        <div id="content-teddy" class="parchment-container hidden bg-pink-50" onclick="event.stopPropagation()">
+            <h2 class="font-elegant text-6xl text-pink-700 text-center mb-8 italic">This song is for you...</h2>
+            <div class="flex flex-col lg:flex-row gap-8 items-center">
+                <div class="w-full lg:w-2/3 aspect-video rounded-xl overflow-hidden shadow-2xl border-4 border-white transform transition-transform hover:rotate-1">
+                    <iframe width="560" height="315" 
+                        src="https://www.youtube-nocookie.com/embed/QEJmOJmAkAc" 
+                         title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        referrerpolicy="strict-origin-when-cross-origin" 
+                         allowfullscreen>
+                            </iframe>
+                </div>
+                <div class="w-full lg:w-1/3 text-center">
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMmdrZTF4dzV4NHYxZzRxbTlxZzJndDNoZzJndDNoZzJndDNoZzJndCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Vz58J8shFW6BvqnYTm/giphy.gif" 
+                         class="w-48 h-48 mx-auto rounded-3xl object-cover shadow-lg border-2 border-white mb-4 animate-bounce" style="animation-duration: 3s">
+                    <p class="font-handwritten text-3xl text-pink-600 animate-pulse">You're my everything! ❤️</p>
+                </div>
+            </div>
+            <div class="flex justify-center mt-6">
+                <button onclick="closeModal()" class="btn-back btn-back-dark">← Back</button>
+            </div>
+        </div>
+
+        <!-- CONTENT: CAKE (Us / Polaroids) -->
+        <div id="content-cake" class="w-full max-w-5xl hidden" onclick="event.stopPropagation()">
+            <div class="text-center mb-12">
+                <h2 class="font-elegant text-8xl text-white glow-text mb-2">Us ❤️</h2>
+                <p class="font-handwritten text-2xl text-pink-200 tracking-widest uppercase">Our Little Moments</p>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-10">
+                <div class="polaroid" style="--rot: -2deg">
+                    <img src="C:\Users\USER\Downloads\AAAA Imagw\webcam-toy-photo7.jpg">
+                    <p class="font-handwritten text-center text-xl mt-3 text-pink-800">just us 💕</p>
+                </div>
+                <div class="polaroid" style="--rot: 3deg">
+                    <img src="C:\Users\USER\Downloads\AAAA Imagw\webcam-toy-photo8.jpg">
+                    <p class="font-handwritten text-center text-xl mt-3 text-pink-800">my favorite</p>
+                </div>
+                <div class="polaroid" style="--rot: -4deg">
+                    <img src="C:\Users\USER\Downloads\AAAA Imagw\webcam-toy-photo10.jpg">
+                    <p class="font-handwritten text-center text-xl mt-3 text-pink-800">our adventure</p>
+                </div>
+                <div class="polaroid" style="--rot: 2deg">
+                    <img src="C:\Users\USER\Downloads\AAAA Imagw\webcam-toy-photo1 (1).jpg">
+                    <p class="font-handwritten text-center text-xl mt-3 text-pink-800">happy days</p>
+                </div>
+                <div class="polaroid" style="--rot: -1deg">
+                    <img src="C:\Users\USER\Downloads\853C38F9-A257-40FB-A367-C8A738A23AA0.jpg">
+                    <p class="font-handwritten text-center text-xl mt-3 text-pink-800">always you</p>
+                </div>
+                <div class="polaroid" style="--rot: 5deg">
+                    <img src="C:\Users\USER\Downloads\IMG_4201.jpg">
+                    <p class="font-handwritten text-center text-xl mt-3 text-pink-800">forever ♡</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <button onclick="closeModal()" class="btn-back">← Back</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goToStage(num) {
+            const current = document.querySelector('.active-stage');
+            const target = document.getElementById('stage' + num);
+
+            if (current) {
+                current.classList.add('exit-stage');
+                setTimeout(() => {
+                    current.classList.remove('active-stage', 'exit-stage');
+                    current.style.display = 'none';
+                    target.style.display = 'flex';
+                    setTimeout(() => target.classList.add('active-stage'), 50);
+                }, 800);
+            }
+        }
+
+        function morphToModal(element, type) {
+            element.classList.add('morphing');
+            setTimeout(() => {
+                openModal(type);
+                element.classList.remove('morphing');
+            }, 400);
+        }
+
+        function openModal(type) {
+            const overlay = document.getElementById('modalOverlay');
+            overlay.style.display = 'flex';
+            
+            document.querySelectorAll('[id^="content-"]').forEach(el => el.classList.add('hidden'));
+            const content = document.getElementById('content-' + type);
+            content.classList.remove('hidden');
+
+            overlay.offsetHeight;
+            overlay.classList.add('modal-active');
+
+            if (type === 'cake') {
+                const polaroids = content.querySelectorAll('.polaroid');
+                polaroids.forEach((p, index) => {
+                    setTimeout(() => {
+                        p.classList.add('morphed');
+                    }, index * 150);
+                });
+            }
+        }
+
+        function closeModal() {
+            const overlay = document.getElementById('modalOverlay');
+            overlay.classList.remove('modal-active');
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                document.querySelectorAll('.polaroid').forEach(p => p.classList.remove('morphed'));
+            }, 500);
+        }
+
+        window.onload = () => {
+            const s1 = document.getElementById('stage1');
+            s1.style.display = 'flex';
+            setTimeout(() => s1.classList.add('active-stage'), 100);
+        }
+    </script>
+</body>
+</html>
