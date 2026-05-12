@@ -23,7 +23,6 @@
             cursor: crosshair;
         }
 
-        /* Subtle Animated Background Gradient */
         .bg-animate {
             position: fixed;
             inset: 0;
@@ -39,7 +38,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Shimmer Overlay Effect */
         .shimmer-overlay {
             position: fixed;
             inset: 0;
@@ -55,7 +53,6 @@
             100% { background-position: 200% 200%; }
         }
 
-        /* Ambient Bokeh / Bubbles */
         .bokeh {
             position: absolute;
             background: rgba(255, 255, 255, 0.15);
@@ -71,7 +68,6 @@
             50% { transform: translate(var(--x), var(--y)) scale(1.3); opacity: 0.4; }
         }
 
-        /* Floating Animation for background elements */
         .floating-heart {
             position: absolute;
             color: white; 
@@ -91,7 +87,6 @@
             100% { transform: translateY(-120vh) rotate(360deg) scale(1.5); opacity: 0; }
         }
 
-        /* Sparkle Particle for Mouse Trail */
         .sparkle {
             position: fixed;
             width: 4px;
@@ -109,7 +104,14 @@
             100% { transform: scale(0) translate(var(--mx), var(--my)); opacity: 0; }
         }
 
-        /* Stage Transition */
+        /* GLITTER HEART PARTICLE */
+        .gift-glitter {
+            position: fixed;
+            pointer-events: none;
+            z-index: 5;
+            border-radius: 50%;
+        }
+
         .stage {
             position: absolute;
             inset: 0;
@@ -136,7 +138,6 @@
             filter: blur(10px);
         }
 
-        /* Typography */
         .font-elegant { font-family: 'Great Vibes', cursive; }
         .font-handwritten { font-family: 'Caveat', cursive; }
 
@@ -151,7 +152,6 @@
             50% { text-shadow: 0 0 25px rgba(255,255,255,1), 0 0 50px rgba(255,182,193,0.9); filter: brightness(1.2); }
         }
 
-        /* Beating Heart Animation - Stage 1 */
         .heart-beating-glow {
             position: absolute;
             width: 180px;
@@ -179,11 +179,11 @@
             50% { transform: scale(1.3); }
         }
 
-        /* Icon Morph Effect when clicking */
         .gift-btn {
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             position: relative;
+            z-index: 20;
         }
 
         .gift-btn:hover {
@@ -192,6 +192,8 @@
         
         .gift-btn img {
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            z-index: 5;
         }
         
         .gift-btn:hover img {
@@ -204,7 +206,6 @@
             filter: blur(15px);
         }
 
-        /* Polaroid Morph Effect */
         .polaroid {
             background: white;
             padding: 10px 10px 35px 10px;
@@ -231,7 +232,6 @@
             object-fit: cover;
         }
 
-        /* Modal Parchment Styles */
         .parchment-container {
             background: #fff;
             position: relative;
@@ -244,6 +244,7 @@
             transform: translateY(50px) scale(0.9);
             opacity: 0;
             transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 50;
         }
 
         .modal-active .parchment-container {
@@ -251,7 +252,6 @@
             opacity: 1;
         }
 
-        /* Modal Overlay */
         #modalOverlay {
             position: fixed;
             inset: 0;
@@ -265,7 +265,6 @@
             padding: 40px 20px;
         }
 
-        /* Letter Reveal Animation */
         .reveal-text p {
             opacity: 0;
             transform: translateY(15px);
@@ -301,20 +300,7 @@
             color: #8b2f3e;
             border-color: rgba(139, 47, 62, 0.2);
         }
-        
-        /* Floating Note Decoration */
-        .decoration-icon {
-            position: absolute;
-            opacity: 0.4;
-            animation: float-slight 5s ease-in-out infinite;
-        }
-        
-        @keyframes float-slight {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(8deg); }
-        }
 
-        /* Smooth Float for YouTube Frame */
         .smooth-float {
             animation: smooth-float-anim 6s ease-in-out infinite;
         }
@@ -324,7 +310,6 @@
             50% { transform: translate(5px, -15px) rotate(-1deg); }
         }
 
-        /* Floating background lines - very subtle */
         .ambient-line {
             position: fixed;
             background: white;
@@ -339,6 +324,44 @@
         @keyframes line-fall {
             from { transform: translateY(-100px); }
             to { transform: translateY(110vh); }
+        }
+
+        /* Fireworks */
+        .firework-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            border-radius: 50%;
+        }
+
+        /* Reload Button Styling */
+        .reload-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .reload-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(-180deg) scale(1.1);
+        }
+
+        .reload-btn svg {
+            width: 24px;
+            height: 24px;
         }
     </style>
 </head>
@@ -373,36 +396,45 @@
 
     <!-- STAGE 3: GIFT CHOICE -->
     <div id="stage3" class="stage">
-        <h2 class="font-elegant text-7xl md:text-9xl text-white mb-20 glow-text text-center">Choose your Gift</h2>
-        <div class="flex flex-wrap justify-center gap-12 md:gap-24 px-6">
-            <div class="gift-btn text-center" onclick="morphToModal(this, 'message')">
-                <div class="relative">
-                    <img src="image/image-removebg-preview (6).png" class="w-28 h-28 md:w-40 md:h-40 mb-4 filter drop-shadow-2xl">
-                    <div class="absolute -top-4 -right-4 bg-white/20 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center animate-pulse">✨</div>
+        <!-- Reload Button -->
+        <div class="reload-btn" onclick="resetExperience()" title="Restart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 4v6h-6"></path>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+        </div>
+
+        <!-- Container for the Heart Drawing -->
+        <div id="stage3-content" class="relative flex flex-col items-center py-10">
+            <h2 class="font-elegant text-7xl md:text-9xl text-white mb-20 glow-text text-center relative z-20">Choose your Gift</h2>
+            <div class="flex flex-wrap justify-center gap-12 md:gap-24 px-6 relative z-20">
+                <div class="gift-btn text-center" onclick="morphToModal(this, 'message')">
+                    <div class="relative gift-icon-wrapper">
+                        <img src="image/image-removebg-preview (6).png" class="w-28 h-28 md:w-40 md:h-40 mb-4 filter drop-shadow-2xl">
+                        <div class="absolute -top-4 -right-4 bg-white/20 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center animate-pulse">✨</div>
+                    </div>
+                    <p class="font-elegant text-4xl md:text-5xl text-white">Message</p>
                 </div>
-                <p class="font-elegant text-4xl md:text-5xl text-white">Message</p>
-            </div>
-            <div class="gift-btn text-center" onclick="morphToModal(this, 'teddy')">
-                <div class="relative">
-                    <img src="image/image-removebg-preview (7).png" class="w-28 h-28 md:w-40 md:h-40 mb-4 filter drop-shadow-2xl">
-                    <div class="absolute -top-4 -right-4 bg-white/20 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center animate-pulse" style="animation-delay: 0.5s">🧸</div>
+                <div class="gift-btn text-center" onclick="morphToModal(this, 'teddy')">
+                    <div class="relative gift-icon-wrapper">
+                        <img src="image/image-removebg-preview (7).png" class="w-28 h-28 md:w-40 md:h-40 mb-4 filter drop-shadow-2xl">
+                        <div class="absolute -top-4 -right-4 bg-white/20 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center animate-pulse" style="animation-delay: 0.5s">🧸</div>
+                    </div>
+                    <p class="font-elegant text-4xl md:text-5xl text-white">Teddy Bear</p>
                 </div>
-                <p class="font-elegant text-4xl md:text-5xl text-white">Teddy Bear</p>
-            </div>
-            <div class="gift-btn text-center" onclick="morphToModal(this, 'cake')">
-                <div class="relative">
-                    <img src="image/image-removebg-preview (8).png" class="w-28 h-28 md:w-40 md:h-40 mb-4 filter drop-shadow-2xl">
-                    <div class="absolute -top-4 -right-4 bg-white/20 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center animate-pulse" style="animation-delay: 1s">🍰</div>
+                <div class="gift-btn text-center" onclick="morphToModal(this, 'cake')">
+                    <div class="relative gift-icon-wrapper">
+                        <img src="image/image-removebg-preview (8).png" class="w-28 h-28 md:w-40 md:h-40 mb-4 filter drop-shadow-2xl">
+                        <div class="absolute -top-4 -right-4 bg-white/20 backdrop-blur-sm rounded-full w-10 h-10 flex items-center justify-center animate-pulse" style="animation-delay: 1s">🍰</div>
+                    </div>
+                    <p class="font-elegant text-4xl md:text-5xl text-white">Cake</p>
                 </div>
-                <p class="font-elegant text-4xl md:text-5xl text-white">Cake</p>
             </div>
         </div>
     </div>
 
     <!-- MODAL OVERLAY -->
     <div id="modalOverlay" onclick="closeModal()">
-        
-        <!-- CONTENT: MESSAGE (Parchment Style) -->
         <div id="content-message" class="parchment-container hidden" onclick="event.stopPropagation()">
             <div class="text-center mb-10">
                 <h2 class="font-elegant text-6xl md:text-7xl text-pink-800">Happy Birthday My Love,</h2>
@@ -421,7 +453,6 @@
             </div>
         </div>
 
-        <!-- CONTENT: TEDDY (Song & Bear) -->
         <div id="content-teddy" class="parchment-container hidden bg-pink-50" onclick="event.stopPropagation()">
             <h2 class="font-elegant text-6xl text-pink-700 text-center mb-12 italic">A special song for you...</h2>
             <div class="flex flex-col lg:flex-row gap-12 items-center">
@@ -448,7 +479,6 @@
             </div>
         </div>
 
-         <!-- CONTENT: CAKE (Us / Polaroids) -->
         <div id="content-cake" class="w-full max-w-5xl hidden" onclick="event.stopPropagation()">
             <div class="text-center mb-12">
                 <h2 class="font-elegant text-8xl text-white glow-text mb-2">Us ❤️</h2>
@@ -489,35 +519,35 @@
     </div>
 
     <script>
+        let heartLoopInterval = null;
+        let heartT = 0;
+        let currentHeartColor = '#FFD700';
+        const heartColors = ['#FFD700', '#FF69B4', '#FFFFFF', '#FFB7C5', '#FF007F', '#00FFFF', '#E0BBE4', '#957DAD'];
+
         function initAmbientEffects() {
             const container = document.getElementById('particles-container');
             const bokehContainer = document.getElementById('bokeh-container');
-            // Simplified emoji list for background
+            container.innerHTML = '';
+            bokehContainer.innerHTML = '';
             const icons = ['🤍', '✨', '💖', '⭐', '🌸'];
             
-            // Reduced particle count from 70 to 35 for a cleaner look
             for (let i = 0; i < 35; i++) { 
                 const heart = document.createElement('div');
                 heart.className = 'floating-heart';
                 heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
-                
                 const duration = 15 + Math.random() * 25; 
                 const size = 15 + Math.random() * 35; 
                 const left = Math.random() * 100;
                 const delay = Math.random() * -30;
-                // Set opacity to at least 0.3 as requested
                 const opacity = 0.3 + Math.random() * 0.2; 
-                
                 heart.style.setProperty('--duration', `${duration}s`);
                 heart.style.setProperty('--size', `${size}px`);
                 heart.style.setProperty('--left', `${left}%`);
                 heart.style.setProperty('--opacity', opacity);
                 heart.style.animationDelay = `${delay}s`;
-                
                 container.appendChild(heart);
             }
 
-            // Reduced bokeh elements
             for (let i = 0; i < 12; i++) {
                 const b = document.createElement('div');
                 b.className = 'bokeh';
@@ -532,16 +562,61 @@
                 b.style.animationDelay = (Math.random() * -10) + 's';
                 bokehContainer.appendChild(b);
             }
+        }
 
-            // Subdued ambient lines
-            for(let i=0; i<8; i++) {
-                const line = document.createElement('div');
-                line.className = 'ambient-line';
-                line.style.left = Math.random() * 100 + 'vw';
-                line.style.animationDuration = (4 + Math.random() * 6) + 's';
-                line.style.animationDelay = Math.random() * -10 + 's';
-                document.body.appendChild(line);
-            }
+        // CONTINUOUS DRAWING HEART LOOP
+        function startHeartDrawingLoop() {
+            if (heartLoopInterval) return;
+
+            heartLoopInterval = setInterval(() => {
+                const stage3 = document.getElementById('stage3');
+                const modal = document.getElementById('modalOverlay');
+                if (!stage3.classList.contains('active-stage') || modal.classList.contains('modal-active')) return;
+                
+                const stageContent = document.getElementById('stage3-content');
+                const rect = stageContent.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+
+                for (let i = 0; i < 4; i++) {
+                    heartT += 0.025;
+                    const t = heartT;
+                    
+                    const scale = (window.innerWidth < 768) ? 14 : 22; 
+                    const x = scale * (16 * Math.pow(Math.sin(t), 3));
+                    const y = -scale * (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+
+                    if (t % (Math.PI * 2) < 0.025) {
+                        currentHeartColor = heartColors[Math.floor(Math.random() * heartColors.length)];
+                    }
+
+                    const glitter = document.createElement('div');
+                    glitter.className = 'gift-glitter';
+                    const size = 5 + Math.random() * 8;
+                    glitter.style.width = size + 'px';
+                    glitter.style.height = size + 'px';
+                    glitter.style.background = currentHeartColor;
+                    glitter.style.boxShadow = `0 0 12px ${currentHeartColor}, 0 0 4px white`;
+                    
+                    glitter.style.left = (centerX + x) + 'px';
+                    glitter.style.top = (centerY + y + 20) + 'px';
+                    
+                    document.body.appendChild(glitter);
+
+                    const popX = (Math.random() - 0.5) * 40;
+                    const popY = (Math.random() - 0.5) * 40;
+
+                    // SLOW MOTION HEART GLITTER
+                    glitter.animate([
+                        { transform: 'translate(-50%, -50%) scale(0) rotate(0deg)', opacity: 0 },
+                        { transform: 'translate(-50%, -50%) scale(1.8) rotate(45deg)', opacity: 1, offset: 0.2 },
+                        { transform: `translate(calc(-50% + ${popX}px), calc(-50% + ${popY}px)) scale(0) rotate(180deg)`, opacity: 0 }
+                    ], {
+                        duration: 3500 + Math.random() * 1500, // Longer, slow-mo life
+                        easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                    }).onfinish = () => glitter.remove();
+                }
+            }, 30);
         }
 
         function spawnSparkle(e) {
@@ -549,14 +624,50 @@
             sparkle.className = 'sparkle';
             sparkle.style.left = e.clientX + 'px';
             sparkle.style.top = e.clientY + 'px';
-            
             const mx = (Math.random() - 0.5) * 60;
             const my = (Math.random() - 0.5) * 60;
             sparkle.style.setProperty('--mx', mx + 'px');
             sparkle.style.setProperty('--my', my + 'px');
-            
             document.body.appendChild(sparkle);
             setTimeout(() => sparkle.remove(), 1000);
+        }
+
+        function spawnFirework() {
+            const colors = ['#FFD700', '#FF69B4', '#00FFFF', '#FF007F', '#FFFFFF', '#7B68EE'];
+            const particleCount = 75; // More particles for fuller look
+            
+            // Random position across the screen to show "at side of message" and everywhere
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            for (let i = 0; i < particleCount; i++) {
+                const p = document.createElement('div');
+                p.className = 'firework-particle';
+                const size = 3 + Math.random() * 5;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.background = color;
+                p.style.boxShadow = `0 0 10px ${color}, 0 0 5px white`;
+                p.style.left = x + 'px';
+                p.style.top = y + 'px';
+
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = 2 + Math.random() * 6; // Slower initial velocity
+                const destX = Math.cos(angle) * (velocity * 35);
+                const destY = Math.sin(angle) * (velocity * 35);
+
+                document.body.appendChild(p);
+
+                // SLOW MOTION FIREWORKS - Increased duration and custom easing
+                p.animate([
+                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                    { transform: `translate(${destX}px, ${destY}px) scale(0.2)`, opacity: 0 }
+                ], {
+                    duration: 4000 + Math.random() * 2000, // Very long life
+                    easing: 'cubic-bezier(0, 0.55, 0.45, 1)' // Slow fade out
+                }).onfinish = () => p.remove();
+            }
         }
 
         function triggerIntroTransition() {
@@ -564,42 +675,32 @@
             const rect = heart.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
-            
-            for(let i=0; i<80; i++) {
+            for(let i=0; i<60; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
                     confetti.style.position = 'fixed';
                     confetti.style.left = centerX + 'px';
                     confetti.style.top = centerY + 'px';
                     confetti.style.zIndex = '100';
-                    confetti.innerHTML = ['❤️','🤍','✨','🌸','💝', '💐', '🌹'][Math.floor(Math.random()*7)];
-                    confetti.style.fontSize = (Math.random() * 25 + 20) + 'px';
-                    confetti.style.pointerEvents = 'none';
-                    
+                    confetti.innerHTML = ['❤️','🤍','✨','🌸','💝'][Math.floor(Math.random()*5)];
+                    confetti.style.fontSize = (Math.random() * 20 + 20) + 'px';
                     const angle = Math.random() * Math.PI * 2;
-                    const distance = Math.random() * 700 + 400;
+                    const distance = Math.random() * 600 + 300;
                     const destX = Math.cos(angle) * distance;
                     const destY = Math.sin(angle) * distance;
-                    
                     document.body.appendChild(confetti);
-                    
                     confetti.animate([
-                        { transform: 'translate(0, 0) scale(1) rotate(0deg)', opacity: 1 },
-                        { transform: `translate(${destX}px, ${destY}px) scale(0) rotate(${360 + Math.random()*360}deg)`, opacity: 0 }
-                    ], {
-                        duration: 2500 + Math.random() * 1000,
-                        easing: 'cubic-bezier(0.1, 1, 0.1, 1)'
-                    }).onfinish = () => confetti.remove();
-                }, Math.random() * 100);
+                        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                        { transform: `translate(${destX}px, ${destY}px) scale(0)`, opacity: 0 }
+                    ], { duration: 2500, easing: 'ease-out' }).onfinish = () => confetti.remove();
+                }, Math.random() * 50);
             }
-            
             setTimeout(() => goToStage(2), 600);
         }
 
         function goToStage(num) {
             const current = document.querySelector('.active-stage');
             const target = document.getElementById('stage' + num);
-
             if (current) {
                 current.classList.add('exit-stage');
                 setTimeout(() => {
@@ -607,31 +708,45 @@
                     current.style.display = 'none';
                     target.style.display = 'flex';
                     setTimeout(() => target.classList.add('active-stage'), 50);
+                    if (num === 3) startHeartDrawingLoop();
                 }, 800);
+            } else {
+                target.style.display = 'flex';
+                target.classList.add('active-stage');
+                if (num === 3) startHeartDrawingLoop();
             }
         }
 
+        function resetExperience() {
+            // Stop drawing heart
+            if (heartLoopInterval) {
+                clearInterval(heartLoopInterval);
+                heartLoopInterval = null;
+            }
+            heartT = 0;
+
+            // Reset UI stages
+            document.querySelectorAll('.stage').forEach(el => {
+                el.classList.remove('active-stage', 'exit-stage');
+                el.style.display = 'none';
+            });
+            
+            // Clear glitters
+            document.querySelectorAll('.gift-glitter').forEach(el => el.remove());
+            
+            // Go back to stage 1
+            const stage1 = document.getElementById('stage1');
+            stage1.style.display = 'flex';
+            setTimeout(() => stage1.classList.add('active-stage'), 50);
+            
+            // Re-init ambient particles
+            initAmbientEffects();
+        }
+
         function morphToModal(element, type) {
-            element.classList.add('morphing');
             const rect = element.getBoundingClientRect();
-            const ring = document.createElement('div');
-            ring.style.cssText = `
-                position: fixed;
-                left: ${rect.left + rect.width/2}px;
-                top: ${rect.top + rect.height/2}px;
-                width: 10px;
-                height: 10px;
-                border: 2px solid white;
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 100;
-                transform: translate(-50%, -50%);
-            `;
-            document.body.appendChild(ring);
-            ring.animate([
-                { width: '10px', height: '10px', opacity: 1 },
-                { width: '500px', height: '500px', opacity: 0 }
-            ], { duration: 600, easing: 'ease-out' }).onfinish = () => ring.remove();
+            element.classList.add('morphing');
+            document.querySelectorAll('.gift-glitter').forEach(el => el.remove());
 
             setTimeout(() => {
                 openModal(type);
@@ -642,20 +757,18 @@
         function openModal(type) {
             const overlay = document.getElementById('modalOverlay');
             overlay.style.display = 'flex';
-            
             document.querySelectorAll('[id^="content-"]').forEach(el => el.classList.add('hidden'));
-            const content = document.getElementById('content-' + type);
-            content.classList.remove('hidden');
-
+            document.getElementById('content-' + type).classList.remove('hidden');
             overlay.offsetHeight; 
             overlay.classList.add('modal-active');
+            
+            const fireworkLoop = setInterval(spawnFirework, 1200); // Increased interval because particles last longer
+            overlay.dataset.fireworkLoop = fireworkLoop;
 
             if (type === 'cake') {
-                const polaroids = content.querySelectorAll('.polaroid');
+                const polaroids = document.querySelectorAll('.polaroid');
                 polaroids.forEach((p, index) => {
-                    setTimeout(() => {
-                        p.classList.add('morphed');
-                    }, 400 + (index * 180));
+                    setTimeout(() => p.classList.add('morphed'), 400 + (index * 150));
                 });
             }
         }
@@ -663,7 +776,9 @@
         function closeModal() {
             const overlay = document.getElementById('modalOverlay');
             overlay.classList.remove('modal-active');
-            
+            if (overlay.dataset.fireworkLoop) {
+                clearInterval(parseInt(overlay.dataset.fireworkLoop));
+            }
             setTimeout(() => {
                 overlay.style.display = 'none';
                 document.querySelectorAll('.polaroid').forEach(p => p.classList.remove('morphed'));
